@@ -52,3 +52,17 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Coveralls
+.coveralls.yml
+
+# Nosetests
+cover/
+
+# aspell
+*.bak
+
+*.hdf5
+*.csv
+*.json
+*.yml
