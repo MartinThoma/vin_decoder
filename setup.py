@@ -22,7 +22,7 @@ config = {
         "argparse",
         "nose"
     ],
-    'keywords': ['VIN'],
+    'keywords': ['VIN', 'WMI', 'OBD'],
     'download_url': 'https://github.com/MartinThoma/vin_c',
     'classifiers': ['Development Status :: 3 - Alpha',
                     'Environment :: Console',

@@ -26,7 +26,7 @@ def parse(vds):
     Source: http://nissanhelp.com/diy/common/nissan_vin.php
     """
     parsed = {}
-    logging.error("#"*100)
+    logging.error("#"*80)
     logging.error(vds)
     parsed['engine'] = get_engine(vds[0])
     parsed['model_line'] = get_model_line(vds[1])

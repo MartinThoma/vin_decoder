@@ -14,10 +14,26 @@ import re
 
 import logging
 import sys
+import pprint
+import pkg_resources
+import os
+from collections import OrderedDict
 
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.DEBUG,
                     stream=sys.stdout)
+
+
+def get_parser():
+    """Return the parser object for this script."""
+    from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+    parser = ArgumentParser(description=__doc__,
+                            formatter_class=ArgumentDefaultsHelpFormatter)
+    parser.add_argument("-v", "--vin",
+                        dest="vin",
+                        required=True,
+                        help="Get VIN")
+    return parser
 
 
 def parse_vin(vin):
@@ -49,7 +65,11 @@ def parse_vin(vin):
         return None
     parsed['wmi'] = wmi
 
-    vds = parse_vds(vin[3:9], wmi['manufacturer'])
+    from . import vdsnissan
+    if 'nissan' in wmi['manufacturer']:
+        vds = vdsnissan.parse(vin[3:9], wmi['manufacturer'])
+    else:
+        vds = parse_vds(vin[3:9], wmi['manufacturer'])
     if vds is None:
         logging.error("The VDS '%s'is invalid", vin[3:9])
         return None
@@ -125,7 +145,10 @@ def parse_wmi(wmi):
         geo_area_table[char] = "South America"
 
     geo_area_table_detailed = {}
-    with open('geo_area_table_detailed.csv', 'rt', newline='') as csvfile:
+    misc_path = pkg_resources.resource_filename('vin_decoder', 'misc/')
+    geo_area_table_csv = os.path.join(misc_path, 'geo_area_table_detailed.csv')
+
+    with open(geo_area_table_csv, 'rt', newline='') as csvfile:
         csvreader = csv.reader(csvfile, delimiter=';', quotechar='"')
         # next(csvreader, None)  # skip the headers
         for key, value in csvreader:
@@ -136,7 +159,8 @@ def parse_wmi(wmi):
               'geo_detailed_area': geo_area_table_detailed["".join(wmi[:2])]}
 
     manufacturer_table = {}
-    with open('manufacturer_table.csv', 'rt', newline='') as csvfile:
+    manufacturer_table_csv = os.path.join(misc_path, 'manufacturer_table.csv')
+    with open(manufacturer_table_csv, 'rt', encoding='utf-8', newline='') as csvfile:
         csvreader = csv.reader(csvfile, delimiter=';', quotechar='"')
         # next(csvreader, None)  # skip the headers
         for key, value in csvreader:
@@ -160,8 +184,8 @@ def parse_vds(vds, manufacturer):
         logging.error("A VDS has exactly 6 characters. You gave '%s'.", vds)
         return None
 
-    from vds.nissan import parse
-    parsed = {'vds': vds, 'parsed': parse(vds)}
+    from . import vdsnissan
+    parsed = {'vds': vds, 'parsed': vdsnissan.parse(vds)}
     return parsed
 
 
@@ -192,6 +216,12 @@ def parse_vis(vis, manufacturer):
     assembly_plant = vis[1]
 
     return {'vis': vis, 'year': year, 'assembly_plant': assembly_plant}
+
+
+def main(vin):
+    pp = pprint.PrettyPrinter(indent=4)
+    parsed = parse_vin(vin)
+    pp.pprint(parsed)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ docs:
 
 update:
 	python setup.py sdist upload --sign
-	sudo pip install vin_decoder --upgrade
+	sudo -H pip install vin_decoder --upgrade
 
 test:
 	nosetests --with-coverage --cover-erase --cover-package vin_decoder --logging-level=INFO --cover-html
