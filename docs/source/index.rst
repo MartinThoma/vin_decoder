@@ -3,13 +3,25 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to vin_decoder's documentation!
-=======================================
+vin_decoder documentation
+=========================
+
+vin_decoder is a tool to get data out of VIN numbers.
 
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   installation
+   development
+
+Commands:
+
+.. toctree::
+   :maxdepth: 2
+
+   decode
 
 
 
