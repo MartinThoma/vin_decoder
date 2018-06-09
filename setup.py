@@ -1,11 +1,22 @@
+# core modules
+import os
+import io
+
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
 
+
+def read(file_name):
+    """Read a text file and return the content as a string."""
+    with io.open(os.path.join(os.path.dirname(__file__), file_name),
+                 encoding='utf-8') as f:
+        return f.read()
+
 config = {
     'name': 'vin_decoder',
-    'version': '0.1.0',
+    'version': '0.1.1',
     'author': 'Martin Thoma',
     'author_email': 'info@martin-thoma.de',
     'maintainer': 'Martin Thoma',
@@ -17,14 +28,15 @@ config = {
     'url': 'https://github.com/MartinThoma/vin_decoder',
     'license': 'MIT',
     'description': 'VIN decoder (Vehicle identification number)',
-    'long_description': ("A tookit to get data about your car"),
+    'long_description': read('README.md'),
+    'long_description_content_type': 'text/markdown',
     'install_requires': [
         "argparse",
         "nose"
     ],
     'keywords': ['VIN', 'WMI', 'OBD'],
     'download_url': 'https://github.com/MartinThoma/vin_c',
-    'classifiers': ['Development Status :: 3 - Alpha',
+    'classifiers': ['Development Status :: 7 - Inactive',
                     'Environment :: Console',
                     'Intended Audience :: Developers',
                     'Intended Audience :: Science/Research',

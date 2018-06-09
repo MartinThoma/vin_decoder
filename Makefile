@@ -1,9 +1,9 @@
 docs:
 	python setup.py upload_docs --upload-dir docs/_build/html
 
-update:
-	python setup.py sdist upload --sign
-	sudo -H pip install vin_decoder --upgrade
+upload:
+	make clean
+	python3 setup.py sdist bdist_wheel && twine upload dist/*
 
 test:
 	nosetests --with-coverage --cover-erase --cover-package vin_decoder --logging-level=INFO --cover-html
@@ -22,4 +22,4 @@ countt:
 	cloc tests
 
 clean:
-	rm *.hdf5 *.yml *.csv
+	rm -f *.hdf5 *.yml *.csv
